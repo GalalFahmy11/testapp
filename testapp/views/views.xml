@@ -1,0 +1,178 @@
+<odoo>
+	 <data>
+		  <record model="ir.ui.view" id="show_field_name">
+				<field name="name">show field name</field>
+				<field name="model">my.app</field>
+				<field name="arch" type="xml">
+					 <form string="Example Form">
+						  <header>
+								<!-- Statusbar field -->
+								<field name="state" widget="statusbar"/>
+
+								<!-- Buttons for actions -->
+								<button name="action_send_email" type="object" string="Send by Email" class="oe_highlight"
+										  invisible="state !='draft'"/>
+								<button name="action_confirm" type="object" string="Confirm" class="oe_highlight"
+										  invisible="state !='sent'"/>
+								<button name="action_reset" type="object" string="Reset To Draft" 
+										  invisible="state !='sale'"/>
+
+
+						  </header>
+						  <sheet>
+								<h1>Welcome to The Garden Restaurant</h1>
+								<h2>
+									 <field name="name" default_focus="1" placeholder="Enter Name Of Order"/>
+								</h2>
+								<group>
+									 <group string="Order Calculations">
+
+										  <field name="price" placeholder="Enter Unit Price"/>
+										  <field name="quantity" placeholder="Enter Quantity"/>
+										  <hr/>
+										  <br/>
+										  <field name="subtotal"/>
+										  <hr/>
+										  <br/>
+										  <field name="tax"/>
+										  <field name="total_with_tax"/>
+										  <hr/>
+										  <br/>
+										  <field name="discount"/>
+										  <field name="total_after_disc"/>
+
+									 </group>
+
+									 <group string="Additional Information">
+										  <field name="selection"/>
+										  <field name="date_time"/>
+										  <field name="date"/>
+										  <field name="binary"/>
+
+
+									 </group>
+								</group>
+								<notebook>
+									 <page string="HTML Scheme">
+										  <group>
+												<field name="html"/>
+										  </group>
+									 </page>
+									 <page string="description">
+										  <group>
+												<field name="description"/>
+										  </group>
+									 </page>
+								</notebook>
+						  </sheet>
+
+						  <div class="oe_chatter">
+								<field name="message_follower_ids"></field>
+								<field name="activity_ids"></field>
+								<field name="message_ids"></field>
+						  </div>
+
+					 </form>
+				</field>
+		  </record>
+
+		  <record id="view_form_my_drinks" model="ir.ui.view">
+				<field name="name">my.drinks.form</field>
+				<field name="model">my.drinks</field>
+				<field name="arch" type="xml">
+					 <form string="Drinks">
+						  <sheet>
+								<group>
+									 <field name="name"/>
+									 <field name="description"/>
+									 <field name="price"/>
+									 <field name="is_alcoholic"/>
+									 <field name="image" widget="image"/>
+								</group>
+						  </sheet>
+					 </form>
+				</field>
+		  </record>
+
+
+		  <!-- server action to the one above -->
+		  <!--
+				<record model="ir.actions.server" id="testapp.action_server">
+				  <field name="name">testapp server</field>
+				  <field name="model_id" ref="model_testapp_testapp"/>
+				  <field name="state">code</field>
+				  <field name="code">
+					 action = {
+						"type": "ir.actions.act_window",
+						"view_mode": "tree,form",
+						"res_model": model._name,
+					 }
+				  </field>
+				</record>
+		  -->
+
+		  <!-- actions opening views on models -->
+		  <record model="ir.actions.act_window" id="Restaurant_action">
+				<field name="name">Restaurant</field>
+				<field name="res_model">my.app</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="New_Orders_action">
+				<field name="name">New Orders</field>
+				<field name="res_model">my.new.order</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="Completed_Orders_action">
+				<field name="name">Completed Orders</field>
+				<field name="res_model">my.completed.order</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="Canceled_Orders_action">
+				<field name="name">Canceled Orders</field>
+				<field name="res_model">my.canceled.order</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="Main_Dishes_action">
+				<field name="name">Main Dishes</field>
+				<field name="res_model">my.main.dishes</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="my_drinks_action">
+				<field name="name">Drinks</field>
+				<field name="res_model">my.drinks</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+		  <record model="ir.actions.act_window" id="my_desserts_action">
+				<field name="name">Desserts</field>
+				<field name="res_model">my.desserts</field>
+				<field name="view_mode">tree,form,kanban,pivot,graph</field>
+		  </record>
+
+		  <!-- Main Menuitem for the Restaurant -->
+		  <menuitem name="Restaurants" id="restaurant_menu_root"/>
+
+		  <!-- My Restaurant Menuitem -->
+		  <menuitem name="My Restaurant" id="Restaurant_menu" parent="restaurant_menu_root"
+						action="Restaurant_action" sequence="1"/>
+
+		  <!-- Orders and Items Menuitem -->
+		  <menuitem name="Orders" id="orders_menu" parent="restaurant_menu_root"
+						sequence="2"/>
+		  <menuitem name="Items" id="items_menu" parent="restaurant_menu_root"
+						sequence="3"/>
+
+		  <!-- Sub-Menuitems under Orders -->
+		  <menuitem name="New Orders" id="new_orders_menu" parent="orders_menu" action="New_Orders_action"/>
+		  <menuitem name="Completed Orders" id="completed_orders_menu" parent="orders_menu"
+						action="Completed_Orders_action"/>
+		  <menuitem name="Canceled Orders" id="canceled_orders_menu" parent="orders_menu"
+						action="Canceled_Orders_action"/>
+
+		  <!-- Sub-Menuitems under Items -->
+		  <menuitem name="Main Dishes" id="main_dishes_menu" parent="items_menu" action="Main_Dishes_action"/>
+		  <menuitem name="Drinks" id="drinks_menu" parent="items_menu" action="my_drinks_action"/>
+		  <menuitem name="Desserts" id="desserts_menu" parent="items_menu" action="my_desserts_action"/>
+
+
+	 </data>
+</odoo>
